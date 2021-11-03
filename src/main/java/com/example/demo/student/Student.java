@@ -7,6 +7,6 @@ import lombok.RequiredArgsConstructor;
 @Data
 public class Student {
 
-    private final Integer id;
-    private final String studentName;
+  private final Integer id;
+  private final String studentName;
 }
