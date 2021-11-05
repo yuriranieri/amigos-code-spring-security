@@ -1,8 +1,8 @@
 package com.example.demo.security;
 
-import static com.example.demo.security.ApplicationUserRole.STUDENT;
+import static com.example.demo.applicationuser.ApplicationUserRole.*;
 
-import com.example.demo.auth.ApplicationUserService;
+import com.example.demo.service.ApplicationUserService;
 import com.example.demo.jwt.JwtConfig;
 import com.example.demo.jwt.JwtTokenVerifier;
 import com.example.demo.jwt.JwtUsernameAndPasswordAuthenticationFilter;
@@ -35,15 +35,16 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     http.csrf()
         .disable()
         .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // using stateless authentication
         .and()
-        .addFilter(
-            new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig,
-                secretKey))
+        .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(),
+            jwtConfig, secretKey))
         .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig),
             JwtUsernameAndPasswordAuthenticationFilter.class)
         .authorizeRequests()
         .antMatchers("/", "index", "/css/*", "/js/*")
+        .permitAll()
+        .antMatchers("/api/v*/registration/**")
         .permitAll()
         .antMatchers("/api/**")
         .hasRole(STUDENT.name())

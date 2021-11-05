@@ -2,7 +2,6 @@ package com.example.demo.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
@@ -40,6 +39,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends
           authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
       return authenticationManager.authenticate(authentication);
+      // make sure that username exists and check whether the password is correct
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -49,7 +49,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
       FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
-//    this method will be invoke after the attemptAuthentication() is successful
+//    this method will be invoked after the attemptAuthentication() is successful
 //    we generate the jwt token and send to our client through the header
 
     String token =
@@ -57,7 +57,8 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends
             .setSubject(authResult.getName())
             .claim("authorities", authResult.getAuthorities()) // set the boy of the payload
             .setIssuedAt(new Date())
-            .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getTokenExpirationAfterDays())))
+            .setExpiration(java.sql.Date.valueOf(
+                LocalDate.now().plusDays(jwtConfig.getTokenExpirationAfterDays())))
             .signWith(secretKey)
             .compact();
 

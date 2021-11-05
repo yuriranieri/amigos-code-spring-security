@@ -37,13 +37,13 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
 
-    String authorizationHeaer = request.getHeader(
-        jwtConfig.getAuthorizationHeader()); // get the token from the header
+    String authorizationHeaer = request.getHeader(jwtConfig.getAuthorizationHeader());
+    // get the token from the header
 
-    if (Strings.isNullOrEmpty(authorizationHeaer)
-        || !authorizationHeaer.startsWith(jwtConfig.getTokenPrefix())) {
+    if (Strings.isNullOrEmpty(authorizationHeaer) || !authorizationHeaer.startsWith(
+        jwtConfig.getTokenPrefix())) {
       filterChain.doFilter(request, response);
-      return; // we reject the request if the token is empty/null or does not starts with Bearer
+      return; // we reject the request if the token is empty/null or does not start with Bearer
     }
 
     String token = authorizationHeaer.replace(jwtConfig.getTokenPrefix(), "");
@@ -52,7 +52,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
       Jws<Claims> claimsJws = Jwts.parserBuilder()
           .setSigningKey(secretKey)
           .build()
-          .parseClaimsJws(token);
+          .parseClaimsJws(token); // A signed JWT is called a 'JWS'
 
 //    The key from before is being used to validate the signature of the JWT.
 //    If it fails to verify the JWT, a SignatureException (which extends from JwtException) is thrown
@@ -62,7 +62,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
       var authorities = (List<Map<String, String>>) body.get("authorities");
 
       Set<SimpleGrantedAuthority> simpleGrantedAuthorities = authorities.stream()
-          .map(main -> new SimpleGrantedAuthority(main.get("authority")))
+          .map(authority -> new SimpleGrantedAuthority(authority.get("authority")))
           .collect(Collectors.toSet());
 
       Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -74,6 +74,6 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
     }
 
     filterChain.doFilter(request, response);
-//  pass the request and response that we got in this filer for the next filter
+//  pass the request and response that we got in this filter for the next one
   }
 }
