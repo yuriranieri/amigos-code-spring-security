@@ -1,11 +1,11 @@
 package com.example.demo.security;
 
-import static com.example.demo.applicationuser.ApplicationUserRole.*;
+import static com.example.demo.applicationuser.ApplicationUserRole.STUDENT;
 
-import com.example.demo.service.ApplicationUserService;
 import com.example.demo.jwt.JwtConfig;
 import com.example.demo.jwt.JwtTokenVerifier;
 import com.example.demo.jwt.JwtUsernameAndPasswordAuthenticationFilter;
+import com.example.demo.service.ApplicationUserService;
 import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

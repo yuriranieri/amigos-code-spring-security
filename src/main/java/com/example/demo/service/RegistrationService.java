@@ -2,8 +2,8 @@ package com.example.demo.service;
 
 import static com.example.demo.applicationuser.ApplicationUserRole.from;
 
-import com.example.demo.entity.ApplicationUserEntity;
 import com.example.demo.applicationuser.ApplicationUserRole;
+import com.example.demo.entity.ApplicationUserEntity;
 import com.example.demo.registration.UserRegistrationRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
